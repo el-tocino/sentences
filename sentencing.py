@@ -14,7 +14,6 @@ for line in sentences:
     outfile.write (line)
     outfile.close
     counter += 1
+    print(line)
 
 
-
-print(*sentences, sep='\n')
