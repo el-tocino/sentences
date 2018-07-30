@@ -17,6 +17,7 @@ sentences = tokenizer.tokenize(sourcedata)
 for file in os.listdir(sys.argv[2]):
         if file.endswith(".txt"):
             ifile = open (file,"r")
+            ## when I tried opening a+, I had failures reading from the file.  So....yeah.
             ofile = open (file,"a")
             testsentence = ifile.read()
             ofile.write ("\n----- matching sentences -----\n")
