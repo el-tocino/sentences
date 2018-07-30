@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 
-# https://github.com/el-tocino/sentences
-
 import os
 import sys
 from fuzzywuzzy import fuzz
@@ -27,4 +25,3 @@ for file in os.listdir(sys.argv[2]):
             ofile.close()
 
 sourcetext.close()
-           
