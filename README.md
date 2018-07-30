@@ -29,11 +29,24 @@ curl -x POST --data-binary @${i} http://deepspeech:1880/stt > ${i}.txt
 done
 ```
 
+And the comparing of source to transcription:
+
+```
+/tools/findsource.py /path/to/source.txt /path/to/transcription/text/files/
+```
+
+The script will update the transcription text files with the top 3 guesses that it pulls from the source text sentences.  It works on a directory at a time since it parses the source text into discrete sentences for comparing.  Doing that once per file would be a time suck.  
+
 ### references
 
 [Sox](http://sox.sourceforge.net/sox.html)
+
 [Deepspeech Server](https://github.com/MainRo/deepspeech-server)
-[Deepspeech}(https://github.com/mozilla/DeepSpeech)
+
+[Deepspeech](https://github.com/mozilla/DeepSpeech)
+
 [My cheesy Deepspeech Server Scripts](https://github.com/el-tocino/DSSS)
 
+### comments/questions/updates/rude remarks?
 
+File a pr!
