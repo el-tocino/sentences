@@ -19,12 +19,9 @@ for file in os.listdir(sys.argv[2]):
             ifile = open (file,"r")
             ofile = open (file,"a")
             testsentence = ifile.read()
-            print ("Working on parsed file %s" % ifile.name)
-            print (testsentence)
-            ofile.write ("----- matching sentences -----")
+            ofile.write ("\n----- matching sentences -----\n")
             ratios = (process.extract(testsentence, sentences, scorer = fuzz.partial_ratio, limit = 3))
-            for item in ratios:
-                ofile.write(str(item))
+            print(*ratios, sep = "\n", file=ofile)                
             ifile.close()
             ofile.close()
 
