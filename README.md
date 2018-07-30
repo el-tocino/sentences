@@ -30,7 +30,8 @@ done
 ```
 And for the transcribing:
 
-```for i in $(ls *.wav)
+```
+for i in $(ls *.wav)
 do
 curl -x POST --data-binary @${i} http://deepspeech:1880/stt > ${i}.txt
 done
