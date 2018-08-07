@@ -105,7 +105,7 @@ def get_best_match(query, corpus, step=4, flex=3, case_sensitive=False, verbose=
 
     qlen = len(query)
 
-    if flex >= qlen/2:
+    if flex >= int(qlen/2):
         print ("Warning: flex exceeds length of query / 2. Setting to default.")
         flex = qlen / 4
 
@@ -124,8 +124,13 @@ for file in os.listdir(sys.argv[2]):
             ofile = open (file,"a")
             print (ifile.name)
             testsentence = ifile.read()
-            step_size = int(len(testsentence) * 3/4)
-            flex_size = int(len(testsentence) / 3)
+            slength = int(len(testsentence))
+            if slength = 0:
+                continue
+            step_size = int(slength * 3/4)
+            flex_size = int(slength / 3)
+            if flex_size > slength / 2:
+                flex = slength / 2
             ofile.write ("\n----- matching sentences -----\n")
             ratios = (process.extract(testsentence, sentences, scorer = fuzz.partial_ratio, limit = 3))
             print(*ratios, sep = "\n", file=ofile)                
