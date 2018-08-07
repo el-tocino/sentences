@@ -107,7 +107,7 @@ def get_best_match(query, corpus, step=4, flex=3, case_sensitive=False, verbose=
 
     if flex >= qlen/2:
         print ("Warning: flex exceeds length of query / 2. Setting to default.")
-        flex = 3
+        flex = qlen / 4
 
     match_values = scan_corpus(step)
     pos = index_max(match_values) * step
@@ -122,7 +122,7 @@ for file in os.listdir(sys.argv[2]):
             ifile = open (file,"r")
             ## when I tried opening a+, I had failures reading from the file.  So....yeah.
             ofile = open (file,"a")
-            print (ifile)
+            print (ifile.name)
             testsentence = ifile.read()
             step_size = int(len(testsentence) * 3/4)
             flex_size = int(len(testsentence) / 3)
