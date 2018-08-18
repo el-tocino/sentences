@@ -1,28 +1,31 @@
 ## what the heck?
-Takes a bunch of subdirectories of mp3 files, convert them to wavs, transcribe the audio contained, compare to source material.  It sort of works.  Maybe. Kind of.  I've been running it against a librivox chapter to refine the process. 
+This takes a bunch of subdirectories of mp3 files, convert them to wavs, transcribe the audio contained, compare to source material.  It sort of works.  Maybe. Kind of.  I've been running it against a librivox chapter to refine the process. Should also refine the scripts more and make them a bit more cohesive eventually. 
+
+Also now adding ramblings about things that pop up for historical amusement.
 
 ## the things
   
-You'll need sox to convert and clip the audio files.  Requirements.txt has the python pieces you'll need listed.  I've left deepspeech and the server bit off of that, you might not want to run those parts on the same host. 
+You'll need sox to convert and clip the audio files.  Requirements.txt has the python pieces you'll need listed.  I've left deepspeech and the server bit off of that, you may not want to run those parts on the same host, or you might have a better solution.
 
 split.sh converts audio files from mp3 to 16k mono wav files, and then splits that based on silence.  findsource.py compares the transcription to the source sentences and adds its tops three guesses to that file.  
 
-I used deep speech since I had it setup, and pushing 40+hours of audio through google's api was going to start costing me. It's running on an nvidia 1030 with an i7-4770.  It handles about 11 sentences/queries a minute, slightly slower than real time. A better card would increase the speed, of course. Once I get the sentences aligned with the source text may try retraining the model...hah.  Just not on a 1030.
+I used deep speech since I had it setup, and pushing 40+hours of audio through google's api was going to start costing me. It's running on an nvidia 1030 with an i7-4770.  It handles about 11 sentences/queries a minute, slightly slower than real time. A better card would increase the speed, of course. Once I get the sentences aligned with the source text may try retraining the model.....just not on a 1030.
 
-### knobs to tweak
+### the stuff
 
-The silence length is probably the big one.  I found a happy medium for the material I was using.  It hits about 80% of sentence break points on the material I used.  Some bits would probably benefit from a more fine-tuned length.  It's quick on any modern machine, so don't be afraid to try changing the value to fit your source audio ( .66 in split.sh is the value I have now).
-
-Depending how good a transcription you're getting, you can change the matching limit from 3 to 2 (or 1?): alter the "limit = 3" line in findsource.py.  
-
-### examplings
+make some waves:
+```
+for i in $(ls *.mp3);  do
+  split.sh $i
+done
+```
 
 for the transcribing:
 
 ```
 for i in $(ls *.wav)
-do
-curl -x POST --data-binary @${i} http://deepspeech:1880/stt > ../${i}.txt
+  do
+  curl -x POST --data-binary @${i} http://deepspeech:1880/stt > ../${i}.txt
 done
 ```
 
@@ -33,6 +36,12 @@ And the comparing of source to transcription:
 ```
 
 The script will update the transcription text files with the top 3 guesses that it pulls from the source text sentences.  It works on a directory at a time since it parses the source text into discrete sentences for comparing.  Doing that once per file would be a time suck.
+
+### knobs to tweak
+
+The silence length is probably the big one.  I found a happy medium for the material I was using.  It hits about 80% of sentence break points on the material I used.  Some bits would probably benefit from a more fine-tuned length.  It's quick on any modern machine, so don't be afraid to try changing the value to fit your source audio ( .66 in split.sh is the value I have now).
+
+Depending how good a transcription you're getting, you can change the matching limit from 3 to 2 (or 1?): alter the "limit = 3" line in findsource.py.  
 
 ### travails
 
@@ -55,10 +64,10 @@ Source material with non-standard words will still require a lot of manual adjus
 
 After parsing large source wav/mp3's, check the length of those files to be sure:
 ```
-exiftool -Duration *.wav
+exiftool -Duration *.wav > durations
 ```
 
-Gutenberg source texts are frequently trimmed to 80-character lines, which ends up with a bunch of \n bits in the middle of lines. There's probably a beautiful soup way to re-frame that to untrimmed paragraphs before it gets fed to the matching.  
+Project Gutenberg source texts are frequently trimmed to 80-character lines, which ends up with a bunch of \n bits in the middle of lines. There's probably a beautiful soup way to re-frame that to untrimmed paragraphs before it gets fed to the matching.  
 
 ### references
 
