@@ -1,5 +1,5 @@
 ## what the heck?
-This takes a bunch of subdirectories of mp3 files, convert them to wavs, transcribe the audio contained, compare to source material.  It sort of works.  Maybe. Kind of.  I've been running it against a librivox chapter to refine the process. Should also refine the scripts more and make them a bit more cohesive eventually. 
+This takes a bunch of subdirectories of mp3 files, convert them to wavs, transcribe the audio contained, compare to source material.  It sort of manually works.  Maybe. Kind of.  I've been running it against a librivox chapter to refine the process. Should also refine the scripts more and make them a bit more cohesive eventually. 
 
 Also now adding ramblings about things that pop up for historical amusement.
 
@@ -17,14 +17,13 @@ I used deep speech since I had it setup, and pushing 40+hours of audio through g
 
 make some waves:
 ```
-for i in $(ls *.mp3);  do
-  split.sh $i
-done
+split.sh dirnamehereornot
 ```
 
 for the transcribing:
 
 ```
+cd wavs/
 for i in $(ls *.wav)
   do
   curl -x POST --data-binary @${i} http://deepspeech:1880/stt > ../${i}.txt
@@ -37,13 +36,11 @@ And the comparing of source to transcription:
 /tools/findsource.py /path/to/source.txt /path/to/transcription/text/files/
 ```
 
-The script will update the transcription text files with the top 3 guesses that it pulls from the source text sentences.  It works on a directory at a time since it parses the source text into discrete sentences for comparing.  Doing that once per file would be a time suck.
+The script will update the transcription text files with the top guess that it pulls from the source text sentences.  It works on a directory at a time since it parses the source text into discrete sentences for comparing.  Doing that once per file would be a time suck.
 
 ### knobs to tweak
 
 The silence length is probably the big one.  I found a happy medium for the material I was using.  It hits about 80% of sentence break points on the material I used.  Some bits would probably benefit from a more fine-tuned length.  It's quick on any modern machine, so don't be afraid to try changing the value to fit your source audio ( .66 in split.sh is the value I have now).
-
-Depending how good a transcription you're getting, you can change the matching limit from 3 to 2 (or 1?): alter the "limit = 3" line in findsource.py.  
 
 ### travails
 
