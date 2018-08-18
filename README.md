@@ -1,5 +1,5 @@
 ## what the heck?
-Takes a bunch of subdirectories of mp3 files, convert them to wavs, transcribe the audio contained, compare to source material.  It sort of works.  
+Takes a bunch of subdirectories of mp3 files, convert them to wavs, transcribe the audio contained, compare to source material.  It sort of works.  Maybe. Kind of.  I've been running it against a librivox chapter to refine the process. 
 
 ## the things
   
@@ -17,23 +17,12 @@ Depending how good a transcription you're getting, you can change the matching l
 
 ### examplings
 
-A bash for loop handled all the directories with audio:
-```
-for i in $(find . -maxdepth 1 -type d |grep -v '.'$)
-do
-cd $i
-    for j in $(ls *.mp3)
-    do
-    ../split.sh $j
-    done
-done
-```
-And for the transcribing:
+for the transcribing:
 
 ```
 for i in $(ls *.wav)
 do
-curl -x POST --data-binary @${i} http://deepspeech:1880/stt > ${i}.txt
+curl -x POST --data-binary @${i} http://deepspeech:1880/stt > ../${i}.txt
 done
 ```
 
@@ -45,6 +34,32 @@ And the comparing of source to transcription:
 
 The script will update the transcription text files with the top 3 guesses that it pulls from the source text sentences.  It works on a directory at a time since it parses the source text into discrete sentences for comparing.  Doing that once per file would be a time suck.
 
+### travails
+
+Deepspeech doesn't like to start translating at the very beginning or end of a file.  Adding a bit of silence to each wav improved my transcriptions.  As there's inconsistent silence in the source material, doing it as a separate step here makes a slight bit more sense than trying to retain the source silences.  And one more quirk about all this, if you're feeding these to tacotron type models, you'll want to create padded copies and retain the originals.  Make sure you keep the two separate...
+
+make some silence:
+```
+sox -n -r 16000 -b 16 -c 1 silence.wav trim 0.0 0.3
+```
+create padded copies:
+```
+export SILWAV=/opt/tacotron/data/silence.wav
+mkdir padded
+for i in $(ls *.wav) ; do
+sox ${SILWAV} ${i} ${SILWAV} padded/${i}
+done
+```
+
+Source material with non-standard words will still require a lot of manual adjustment.  
+
+After parsing large source wav/mp3's, check the length of those files to be sure:
+```
+exiftool -Duration *.wav
+```
+
+Gutenberg source texts are frequently trimmed to 80-character lines, which ends up with a bunch of \n bits in the middle of lines. There's probably a beautiful soup way to re-frame that to untrimmed paragraphs before it gets fed to the matching.  
+
 ### references
 
 [Sox](http://sox.sourceforge.net/sox.html)
@@ -54,6 +69,12 @@ The script will update the transcription text files with the top 3 guesses that 
 [Deepspeech](https://github.com/mozilla/DeepSpeech)
 
 [My cheesy Deepspeech Server Scripts](https://github.com/el-tocino/DSSS)
+
+[exiftool](https://www.sno.phy.queensu.ca/~phil/exiftool/)
+
+[Project Gutenberg](https://www.gutenberg.org/)
+
+[Librivox](https://librivox.org/)
 
 ### comments/questions/updates/rude remarks?
 
