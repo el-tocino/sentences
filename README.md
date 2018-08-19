@@ -1,5 +1,5 @@
 ## what the heck?
-This takes a bunch of subdirectories of mp3 files, convert them to wavs, transcribe the audio contained, compare to source material.  It sort of manually works.  Maybe. Kind of.  I've been running it against a librivox chapter to refine the process. Should also refine the scripts more and make them a bit more cohesive eventually. 
+This takes a bunch of subdirectories of mp3 files, convert them to wavs, transcribe the audio contained, compare to source material in prep for building a tacotron data model.  It sort of manually works. I've been running it against a librivox chapter to refine the process. Should also refine the scripts more and make them a bit more cohesive eventually. 
 
 Also now adding ramblings about things that pop up for historical amusement.
 
@@ -67,6 +67,13 @@ exiftool -Duration *.wav > durations
 ```
 
 Project Gutenberg source texts are frequently trimmed to 80-character lines, which ends up with a bunch of \n bits in the middle of lines. There's probably a beautiful soup way to re-frame that to untrimmed paragraphs before it gets fed to the matching.  
+
+There's a number of short (<1s) files ("end of chapter") that crop up.  These should be removed or combined with other short files to make longer files.  
+```
+sox -n -r 16000 -b 16 -c 1 space.wav trim 0.0 0.15
+sox shortwav1.wav space.wav shorwav2.wav new.wav
+```
+be sure to edit the txt files as well.  
 
 ### references
 
