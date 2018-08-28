@@ -71,7 +71,7 @@ Project Gutenberg source texts are frequently trimmed to 80-character lines, whi
 There's a number of short (<1s) files ("end of chapter") that crop up.  These should be removed or combined with other short files to make longer files.  
 ```
 sox -n -r 16000 -b 16 -c 1 space.wav trim 0.0 0.15
-sox shortwav1.wav space.wav shorwav2.wav new.wav
+sox shortwav1.wav space.wav shortwav2.wav new.wav
 ```
 be sure to edit the txt files as well.  
 
