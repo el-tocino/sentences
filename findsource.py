@@ -131,9 +131,9 @@ for file in os.listdir(sys.argv[2]):
             flex_size = int(slength / 3)
             if flex_size > slength / 2:
                 flex = slength / 2
-            ofile.write ("\n----- matching sentences -----\n")
-            ratios = (process.extract(testsentence, sentences, scorer = fuzz.partial_ratio, limit = 3))
-            print(*ratios, sep = "\n", file=ofile)                
+            #ofile.write ("\n----- matching sentences -----\n")
+            #ratios = (process.extract(testsentence, sentences, scorer = fuzz.partial_ratio, limit = 3))
+            #print(*ratios, sep = "\n", file=ofile)                
             diffmatch = get_best_match(testsentence, sourcedata, step_size, flex_size)
             ofile.write ("\n----- diff matching -----\n")
             print (diffmatch, sep = "\n", file=ofile)
