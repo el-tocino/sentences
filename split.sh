@@ -27,9 +27,6 @@ if [[ ! -d tmp ]] ; then
   mkdir tmp
 fi
 
-if [[ ! -d padded ]] ; then
-  mkdir padded
-fi
 
 # conjunction functions...
 
@@ -66,14 +63,4 @@ for wtime in $(grep ^Duration tmp/durations | cut -d: -f2 | cut -d' ' -f2); do
     split_wav "$REDO" "$REDO" ".35"
     mv "$REDO" tmp/
   fi
-done
-
-# make padded copies...
-
-sox -n -r 16000 -b 16 -c 1 tmp/silence.wav trim 0.0 0.4
-SILWAV="tmp/silence.wav"
-
-for wavs in $(ls wavs/*.wav) ; do
-  PFN=$(echo "${wavs}" | sed s/wavs/padded/)
-  sox "${SILWAV}" "${WAVS}" "${SILWAV}" "${PFN}"
 done
