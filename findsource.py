@@ -125,7 +125,7 @@ for file in os.listdir(sys.argv[2]):
             print (ifile.name)
             testsentence = ifile.read()
             slength = int(len(testsentence))
-            if slength = 0:
+            if slength < 2:
                 continue
             step_size = int(slength * 3/4)
             flex_size = int(slength / 3)
