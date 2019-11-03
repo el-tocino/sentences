@@ -3,7 +3,7 @@ This takes a bunch of subdirectories of mp3 files, convert them to wavs, transcr
 
 Also now adding ramblings about things that pop up for historical amusement.
 
-(11/2/2019: minor improvements for transcription/flex issues)
+(2091-11-02: minor improvements for transcription/flex issues)
 
 ### the things
   
