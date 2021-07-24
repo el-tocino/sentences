@@ -3,8 +3,8 @@
 import os
 import sys
 import nltk.data
-from fuzzywuzzy import fuzz
-from fuzzywuzzy import process
+from rapidfuzz import fuzz
+from rapidfuzz import process
 from nltk import metrics, stem, tokenize
 from difflib import SequenceMatcher
 
